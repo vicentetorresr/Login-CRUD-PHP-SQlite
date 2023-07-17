@@ -1,57 +1,12 @@
 <?php
-session_start();
-
-// Verificar si no hay una sesión activa
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit;
-}
-
-
-// Cerrar sesión
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location: login.php");
-    exit;
-}
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<title>MOSTRAR USUARIOS</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-<link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet" href="../css/styleTable.css">
-
-
-</head>
-<body>
-    <a class="atras-si" href="../inicio.php">Volver</a>
-    <table id="tablaUsuarios">
-  <tr>
-    <th>ID</th>
-    <th>USUARIO</th>
-    <th>CONTRASEÑA</th>
-    <th>ROL (1=admin, 0=usuario)</th>
-    <th>Acciones</th>
-  </tr>
-  <script src="../js/eliminar.js"></script>
-  <script src="../js/editar.js"></script>
-  <script src="../js/crearUsuario.js"></script>
-  <?php
-$conexion = mysqli_connect("localhost", "root", "", "user");
-
-// Verificar la conexión a la base de datos
-if (mysqli_connect_errno()) {
-    die("Error al conectar a la base de datos: " . mysqli_connect_error());
-}
+// Conexión a la base de datos SQLite
+$db = new SQLite3('../db/user.db');
 
 // Consulta SQL para obtener los datos de la tabla
 $query = "SELECT * FROM users";
 
 // Ejecutar la consulta y obtener los resultados
-$result = mysqli_query($conexion, $query);
+$result = $db->query($query);
 
 // Verificar si se obtuvieron resultados
 if ($result) {
@@ -59,7 +14,7 @@ if ($result) {
     $esPrimeraFila = true;
     
     // Recorrer los resultados y generar las filas de la tabla
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
         echo "<tr>";
         echo "<td><span class='editable' contenteditable='false'>" . $row['idUser'] . "</span></td>";
         echo "<td><span class='editable' contenteditable='false'>" . $row['username'] . "</span></td>";
@@ -86,16 +41,15 @@ if ($result) {
     }
 
     // Liberar el resultado de la consulta
-    mysqli_free_result($result);
+    $result->finalize();
 } else {
     // Error al ejecutar la consulta
-    echo "Error al obtener los datos de la tabla: " . mysqli_error($conexion);
+    echo "Error al obtener los datos de la tabla: " . $db->lastErrorMsg();
 }
 
 // Cerrar la conexión a la base de datos
-mysqli_close($conexion);
+$db->close();
 ?>
-
 
 </table>
 <button id="btnAgregarUsuario" onclick="addUser()"><i class="fas fa-plus"></i> </button>

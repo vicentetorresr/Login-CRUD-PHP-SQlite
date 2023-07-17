@@ -5,32 +5,27 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 $role = $_POST['role'];
 
-// Conexión a la base de datos MySQLi
-$conexion = mysqli_connect("localhost", "root", "", "user");
+// Conexión a la base de datos SQLite
+$db = new SQLite3('../../db/user.db');
 
-// Verificar la conexión a la base de datos
-if (mysqli_connect_errno()) {
-    die("Error al conectar a la base de datos: " . mysqli_connect_error());
-}
-
-// Escapar los valores para evitar ataques de inyección SQL
-$id = mysqli_real_escape_string($conexion, $id);
-$username = mysqli_real_escape_string($conexion, $username);
-$password = mysqli_real_escape_string($conexion, $password);
-$role = mysqli_real_escape_string($conexion, $role);
+// Escapar los valores para evitar ataques de inyección SQL (NO necesario para SQLite)
+// $id = SQLite3::escapeString($id);
+// $username = SQLite3::escapeString($username);
+// $password = SQLite3::escapeString($password);
+// $role = SQLite3::escapeString($role);
 
 // Actualizar los datos en la tabla
 $query = "UPDATE users SET username = '$username', password = '$password', role = '$role' WHERE idUser = '$id'";
-if (mysqli_query($conexion, $query)) {
+if ($db->exec($query)) {
     // Cambios guardados correctamente
     echo "Cambios guardados correctamente";
     header("Location: ../mostrarUsuarios.php");
     exit;
 } else {
     // Error al actualizar los datos
-    $error = "Error al guardar los cambios: " . mysqli_error($conexion);
+    $error = "Error al guardar los cambios: " . $db->lastErrorMsg();
 }
 
 // Cerrar la conexión a la base de datos
-mysqli_close($conexion);
+$db->close();
 ?>

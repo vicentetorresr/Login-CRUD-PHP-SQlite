@@ -9,45 +9,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($password)) {
         $error = "Por favor, complete todos los campos.";
     } else {
-        // Conexión a la base de datos MySQLi
-        $conexion = mysqli_connect("localhost", "root", "", "user");
+        // Conexión a la base de datos SQLite
+        $db = new SQLite3('../db/user.db');
 
-        // Verificar la conexión a la base de datos
-        if (mysqli_connect_errno()) {
-            die("Error al conectar a la base de datos: " . mysqli_connect_error());
-        }
-
-        // Escapar los valores para evitar ataques de inyección SQL
-        $username = mysqli_real_escape_string($conexion, $username);
-        $password = mysqli_real_escape_string($conexion, $password);
+        // Escapar los valores para evitar ataques de inyección SQL (NO necesario para SQLite)
+        // $username = SQLite3::escapeString($username);
+        // $password = SQLite3::escapeString($password);
 
         // Consultar la base de datos para verificar si el usuario ya existe
         $query = "SELECT * FROM users WHERE username = '$username'";
-        $result = mysqli_query($conexion, $query);
+        $result = $db->query($query);
 
         // Verificar si el usuario ya existe
-        if (mysqli_num_rows($result) > 0) {
+        if ($result && $result->fetchArray()) {
             // Usuario ya existe
             $error = "El usuario ya está registrado.";
         } else {
             // Insertar el nuevo usuario en la base de datos
             $query = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
-            if (mysqli_query($conexion, $query)) {
+            if ($db->exec($query)) {
                 // Registro exitoso
                 $_SESSION['username'] = $username;
                 header("Location: ../login.html");
                 exit;
             } else {
                 // Error al insertar el usuario
-                $error = "Error al registrar el usuario: " . mysqli_error($conexion);
+                $error = "Error al registrar el usuario: " . $db->lastErrorMsg();
             }
         }
 
         // Cerrar la conexión a la base de datos
-        mysqli_close($conexion);
-            }
+        $db->close();
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>

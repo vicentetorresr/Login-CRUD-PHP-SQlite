@@ -17,31 +17,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($password)) {
         $error = "Por favor, complete todos los campos.";
     } else {
-        // Conectar a la base de datos MySQLi
-        $conexion = mysqli_connect("localhost", "root", "", "user");
+        // Conexión a la base de datos SQLite
+        $db = new SQLite3('../db/user.db');
 
-        // Verificar la conexión a la base de datos
-        if (mysqli_connect_errno()) {
-            die("Error al conectar a la base de datos: " . mysqli_connect_error());
-        }
-
-        // Escapar los valores para evitar inyección de SQL
-        $username = mysqli_real_escape_string($conexion, $username);
-        $password = mysqli_real_escape_string($conexion, $password);
+        // Escapar los valores para evitar inyección de SQL (NO necesario para SQLite)
+        // $username = SQLite3::escapeString($username);
+        // $password = SQLite3::escapeString($password);
 
         // Consultar la base de datos para verificar las credenciales y el rol
         $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-        $result = mysqli_query($conexion, $query);
+        $result = $db->query($query);
 
         // Obtener el número de filas del resultado de la consulta
-        $row_count = mysqli_num_rows($result);
+        $row_count = 0;
+        while ($row = $result->fetchArray()) {
+            $row_count++;
+        }
 
         if ($row_count == 1) {
             // Inicio de sesión exitoso
             $_SESSION['username'] = $username;
 
             // Obtener el rol del usuario
-            $row = mysqli_fetch_assoc($result);
+            $result->reset();
+            $row = $result->fetchArray(SQLITE3_ASSOC);
             $role = intval($row['role']);
 
             // Redireccionar al dashboard correspondiente
@@ -56,12 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Credenciales inválidas.";
         }
 
-        // Liberar el resultado de la consulta y cerrar la conexión a la base de datos
-        mysqli_free_result($result);
-        mysqli_close($conexion);
+        // Cerrar la conexión a la base de datos
+        $db->close();
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>

@@ -3,17 +3,16 @@
 if (isset($_POST['id'])) {
     $userId = $_POST['id'];
 
-    $conexion = mysqli_connect("localhost", "root", "", "user");
-    if (!$conexion) {
-        die("Error al conectar con la base de datos: " . mysqli_connect_error());
-    }
+    // Conexión a la base de datos SQLite
+    $db = new SQLite3('../../db/user.db');
 
+    // Consultar la base de datos para eliminar el usuario
     $query = "DELETE FROM users WHERE idUser = '$userId'";
-    $result = mysqli_query($conexion, $query);
+    $result = $db->exec($query);
 
-    if ($result) {
+    if ($result !== false) {
         // El usuario se eliminó exitosamente
-        mysqli_close($conexion);
+        $db->close();
         header("Location: ../mostrarUsuarios.php");
         exit;
     } else {

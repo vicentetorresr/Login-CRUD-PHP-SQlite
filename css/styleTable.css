@@ -1,0 +1,104 @@
+
+  table {
+    border-collapse: collapse;
+    width: 70%;
+    color: white;
+  }
+
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th, td:hover {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+    background-color: #555;
+  }
+
+
+  .atras-si {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: dark;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+  }
+
+  .editar {
+    margin-right: 5px;
+    color: blue;
+    cursor: pointer;
+  }
+
+  .editar:hover {
+    border-radius: 40%;
+    margin-right: 5px;
+    color: blue;
+    cursor: pointer;
+    background-color: grey;
+  }
+
+
+  .eliminar {
+    margin-right: 5px;
+    color: red;
+    cursor: pointer;
+  }
+  
+  .eliminar:hover {
+    background-color: grey;
+    border-radius: 40%;
+    margin-right: 5px;
+    color: red;
+    cursor: pointer;
+  }
+
+  .guardar {
+    margin-right: 5px;
+    color: green;
+    cursor: pointer;
+  }
+
+  .guardar:hover {
+    background-color: grey;
+    border-radius: 40%;
+    margin-right: 5px;
+    color: green;
+    cursor: pointer;
+  }
+
+  #btnAgregarUsuario {
+    color:white;
+    position: wrap;
+    left: 60%;
+    padding: 10px;
+    text-align: right;
+    box-sizing: border-box;
+    background-color: #1d1d1d;
+  }
+
+  .atras-si:hover {
+    background-color: darkgray;
+  }
+
+  #btnAgregarUsuario:hover {
+    background-color: darkgray;
+    cursor: pointer;
+  }
+
+  .editable:hover {
+    cursor: text;
+  }
+
+  .cancelar:hover {
+    background-color: grey;
+    border-radius: 40%;
+    cursor: pointer;
+  }

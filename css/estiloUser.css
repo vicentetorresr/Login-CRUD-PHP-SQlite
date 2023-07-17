@@ -1,0 +1,67 @@
+body {
+  background-color: black;
+  color: white;
+}
+
+nav {
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #333;
+}
+
+.logout-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+
+.logout-button:hover {
+    background-color: darkred;
+    cursor: pointer;
+}
+
+#movies-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .movie {
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    background-color: black;
+    color:white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .movie img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }

@@ -31,7 +31,6 @@ function saveNewUser(element) {
   
   if (role !== "1" && role !== "0") {
     alert("El valor de role debe ser 1 o 0.");
-    window.location.href = "../php/mostrarUsuarios.php";
     return; // No se realizan cambios ni se envía la solicitud al servidor
   } else {
     // Realizar una solicitud al servidor para guardar los cambios en la base de datos
@@ -42,10 +41,12 @@ function saveNewUser(element) {
       if (xhr.readyState === 4 && xhr.status === 200) {
         // Manejar la respuesta del servidor si es necesario
         console.log(xhr.responseText);
+        
+        // Redirigir a la página después de recibir la respuesta del servidor
+        window.location.href = "../php/mostrarUsuarios.php";
       }
     };
     xhr.send("username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password) + "&role=" + encodeURIComponent(role));
-    window.location.href = "../php/mostrarUsuarios.php";
   }
 }
 
